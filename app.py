@@ -33,17 +33,23 @@ uploaded_file = st.file_uploader("Scegli un file PDF", type="pdf")
 
 if uploaded_file is not None:
     num_pages, num_words, num_chars = extract_pdf_stats(uploaded_file)
-
-    st.subheader("Statistiche del PDF")
-    st.write(f"Numero di pagine: {num_pages}")
-    st.write(f"Numero di parole: {num_words}")
-    st.write(f"Numero di caratteri: {num_chars}")
+    #######
+    # Analisi Testo
+    #######
+    # Direi di fare quel discorso dei paragrafi e della descrizione
+    # Quindi tipo un array di tuple [(paragrafo, descrizione_per_musica), ...]
 
 # Select box per selezionare un file audio
 audio_folder = "references_audio"  # Sostituisci con il percorso della tua cartella audio
 audio_files = [f for f in os.listdir(audio_folder) if f.endswith(('.mp3', '.wav'))]
 selected_audio = st.selectbox("Seleziona una voce da usare per la narrazione", audio_files)
 
+####### 
+# Christian
+#######
+# Per ogni paragrafo genero il corrispettivo audio
+# La struttura e' sempre un array di tuple del tipo [(audio, durata_in_secondi), ...]
+ 
 text = st.text_area("Testo da convertire in audio")
 # Bottone di generazione
 if st.button('Genera e Riproduci'):
@@ -54,3 +60,18 @@ if st.button('Genera e Riproduci'):
         st.audio("output.wav")
     else:
         st.error("Modello TTS non caricato. Per favore, carica il modello prima di generare l'audio.")
+
+#######
+# Cristian
+#######
+# Sezione per generare la soundtrack
+# a partire dalla tupla dei paragrafi e quelli degli audio.
+# Per ogni elemento di entrambi gli array, generare una soundtrack che richiede
+# La descrizione audio del paragrafo e la durata attesa dello spezzone audio
+
+
+####### Fase finale
+# Viene fatto un merge di soundtrack e parlato per generare l'audio finale
+# Vengono concatenati i vari spezzoni audio e generato un unico file audio
+# Ogni spezzone entra in fade in e fade out per evitare discontinuita' audio
+# L'audio finale viene riprodotto
