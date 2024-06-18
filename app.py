@@ -1,6 +1,7 @@
 import streamlit as st
 import time
 from xttsv2 import TTSmodel
+from sound_generator import TTAmodel
 import os
 
 # Function to simulate model loading
@@ -8,7 +9,11 @@ def load_models():
     st.info("Caricamento modello TTS...")
     tts = TTSmodel()
     st.success("Modello TTS caricato con successo")
-    return tts
+
+    tta = TTAmodel()
+    st.success("Modello TTA caricato con successo")
+    
+    return tts, tta
 
 # Function to extract basic stats from PDF
 def extract_pdf_stats(file):
@@ -22,9 +27,12 @@ st.header("Load Neural Models")
 if 'tts_model' not in st.session_state:
     st.session_state.tts_model = None
 
+if 'tta_model' not in st.session_state:
+    st.session_state.tta_model = None
+
 if st.button("Carica Modelli"):
     with st.spinner("Caricamento in corso..."):
-        st.session_state.tts_model = load_models()
+        st.session_state.tts_model, st.session_state.tta_model = load_models()
     st.success("Tutti i modelli sono stati caricati con successo!")
 
 # Section to upload PDF and show stats
@@ -68,6 +76,14 @@ if st.button('Genera e Riproduci'):
 # a partire dalla tupla dei paragrafi e quelli degli audio.
 # Per ogni elemento di entrambi gli array, generare una soundtrack che richiede
 # La descrizione audio del paragrafo e la durata attesa dello spezzone audio
+#
+#parametri che servono per generare audio sottofondo, quindi per richiamare tta_model:
+#prompt, seconds_total, steps, cfg_scale, api_name, output_path
+# promp viene preso da GPT-4 con API
+# seconds_total viene preso dalla lunghezza dell'audio generato da tts
+# il resto dei parametri (tranne output_path) sono da tunare
+
+
 
 
 ####### Fase finale
