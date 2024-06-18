@@ -2,6 +2,7 @@ import streamlit as st
 from pydub import AudioSegment
 from pydub.playback import play
 import os
+from xttsv2 import TTSmodel
 
 # Funzione per estrarre testo da PDF
 def extract_text_from_pdf(file):
@@ -14,6 +15,10 @@ def play_audio(file_path):
 
 # Interfaccia Streamlit
 st.title('Applicazione PDF e Audio con Streamlit')
+
+st.info("Caricamento modello TTS")
+tts = TTSmodel("tts_models/multilingual/multi-dataset/xtts_v2")
+st.info("Modello TTS caricato con successo")
 
 # Box per inserire un PDF
 uploaded_pdf = st.file_uploader("Carica il tuo libro in formato PDF", type="pdf")
